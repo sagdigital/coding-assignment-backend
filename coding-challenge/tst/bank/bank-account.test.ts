@@ -45,7 +45,14 @@ describe('Tests for bank account class', () => {
     });
 
     it('should withdraw the specified amount and update the current balance', () => {
+        // Arrange
+        const withdrawAmount = 5;
 
+        // Act
+        bankAccount.withdraw(withdrawAmount);
+
+        // Assert
+        expect(bankAccount.checkBalance()).toBe(initialBalance - withdrawAmount);
     });
 
     //#endregion
@@ -53,11 +60,25 @@ describe('Tests for bank account class', () => {
     //#region Deposit
 
     it('should throw a "Deposit amount has to be greater than 0" error!', () => {
+        // Arrange
+        const depositAmount = -5;
+
+        // Act & Assert
+        expect(
+            () => bankAccount.deposit(depositAmount)
+        ).toThrow('Deposit amount has to be greater than 0');
 
     });
 
     it('should update the account balance with the specified sum!', () => {
+        // Arrange
+        const depositAmount = 5;
 
+        // Act
+        bankAccount.deposit(depositAmount);
+
+        // Assert
+        expect(bankAccount.checkBalance()).toBe(initialBalance + depositAmount);
     });
 
     //#endregion
@@ -86,7 +107,21 @@ describe('Tests for bank account class', () => {
     });
 
     it('should transfer the specified sum back to the source account if the deposit operation fails!', () => {
+        // Arrange
+        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
+        const transferAmount = 100;
 
+        jest.spyOn(destinationAccount, 'deposit').mockImplementationOnce(() => {
+            throw new Error();
+        })
+
+        // Act & Assert
+        expect(
+            () => bankAccount.transfer(transferAmount, destinationAccount)
+        ).toThrow('Could not deposit amount');
+
+        // Assert
+        expect(bankAccount['balance']).toBe(initialBalance);
     });
     //#endregion
 
