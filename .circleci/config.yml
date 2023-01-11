@@ -28,7 +28,9 @@ commands:
   test:
     description: "Run the tests"
     steps:
-      - run: npm run test
+      - run: npm run test-ci
+      - store_artifacts:
+          path: coverage
 
 executors:
   node-container:
