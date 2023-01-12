@@ -10,8 +10,8 @@ In this assignment you will have to update a simple Bank Account class that can 
 
 ## Your Todos
 
-  - Make sure all unit tests pass
-  - Create the missing implementation for the BankAccount class methods and update the unit tests in order to achieve 100% coverage
+  - Make sure all unit tests pass.
+  - Create the missing implementation for the BankAccount class methods and update the unit tests in order to achieve 100% coverage.
   - Check the whole repo - Some mistakes might have crept in so be very careful!
 
 ## How to hand in your submission
