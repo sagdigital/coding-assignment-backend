@@ -40,7 +40,7 @@ describe('Tests for bank account class', () => {
     it('should throw a "Insufficient funds!" error', () => {
         // Act & Assert
         expect(() => {
-            bankAccount.withdraw(initialBalance + 1)
+            bankAccount.withdraw(initialBalance + 1)g
         }).toThrow('Insufficient funds!');
     });
 

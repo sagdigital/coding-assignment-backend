@@ -11,7 +11,10 @@ export class BankAccount {
     }
 
     withdraw(withdrawAmount: number) {
-        if (this.balance >= withdrawAmount) {
+        if (withdrawAmount <= 0) {
+            throw new Error('Withdraw amount has to be greater than 0!')
+        }
+        if (this.balance < withdrawAmount) {
             throw new Error('Insufficient funds!');
         }
 
@@ -27,6 +30,12 @@ export class BankAccount {
     };
 
     transfer(transferAmount: number, destinationBankAccount: BankAccount) {
-      // This method should take a sum out of the source account and transfer it to the destination bank account.
+        if (transferAmount > this.balance){
+            throw new Error('Transfer amount has to be smaller than balance')
+        }
+
+        this.balance -= transferAmount;
+        destinationBankAccount.balance += transferAmount;
+
     };
 }
