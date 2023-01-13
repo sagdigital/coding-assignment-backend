@@ -22,6 +22,9 @@ export class BankAccount {
     };
 
     deposit(depositAmount: number) {
+        if (depositAmount <= 0) {
+            throw new Error('Deposit amount has to be greater than 0')
+        }
         this.balance += depositAmount;
     };
 
@@ -30,12 +33,10 @@ export class BankAccount {
     };
 
     transfer(transferAmount: number, destinationBankAccount: BankAccount) {
-        if (transferAmount > this.balance){
-            throw new Error('Transfer amount has to be smaller than balance')
+        if (transferAmount > this.balance || transferAmount <= 0){
+            throw new Error('Something went wrong')
         }
-
-        this.balance -= transferAmount;
-        destinationBankAccount.balance += transferAmount;
-
+        this.withdraw(transferAmount);
+        destinationBankAccount.deposit(transferAmount)
     };
 }

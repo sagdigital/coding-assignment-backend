@@ -40,12 +40,18 @@ describe('Tests for bank account class', () => {
     it('should throw a "Insufficient funds!" error', () => {
         // Act & Assert
         expect(() => {
-            bankAccount.withdraw(initialBalance + 1)g
+            bankAccount.withdraw(initialBalance + 1)
         }).toThrow('Insufficient funds!');
     });
 
     it('should withdraw the specified amount and update the current balance', () => {
-
+        // Arrange 
+        const withdrawAmount = 100;
+        
+        // Act & Assert
+       bankAccount.withdraw(withdrawAmount);
+        
+       expect(bankAccount.balance).toBe(initialBalance - withdrawAmount)
     });
 
     //#endregion
@@ -53,18 +59,30 @@ describe('Tests for bank account class', () => {
     //#region Deposit
 
     it('should throw a "Deposit amount has to be greater than 0" error!', () => {
-
+        // Arrange
+        const depositAmount = 0;
+        
+        // Act & Assert
+        expect(() => {
+            bankAccount.deposit(depositAmount)
+        }).toThrow('Deposit amount has to be greater than 0')
     });
 
     it('should update the account balance with the specified sum!', () => {
-
+        // Arrange
+        const depositAmount = 100;
+        
+        // Act & Assert
+        bankAccount.deposit(depositAmount);
+        
+        expect(bankAccount.balance).toBe(initialBalance + depositAmount)
     });
 
     //#endregion
 
     //#region Transfer
 
-    it('should transfer the specified sum from the destination account to the source account!', () => {
+    it('should transfer the specified sum from the source account to the destination account!', () => {
         // Arrange
         const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
         const transferAmount = 100;
@@ -86,8 +104,16 @@ describe('Tests for bank account class', () => {
     });
 
     it('should transfer the specified sum back to the source account if the deposit operation fails!', () => {
-
+        // Arrange
+        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
+        const transferAmount = -10;
+        
+        // Act & Assert
+        expect(() => {
+            bankAccount.transfer(transferAmount, destinationAccount)
+        }).toThrow('Something went wrong');
+        
+        expect(bankAccount.balance).toBe(initialBalance);
     });
     //#endregion
-
 })
