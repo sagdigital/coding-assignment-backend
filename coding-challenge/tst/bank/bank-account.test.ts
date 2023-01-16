@@ -33,14 +33,14 @@ describe('Tests for bank account class', () => {
 
         // Act & Assert
         expect(() => {
-            bankAccount.withdraw(withdrawAmount)
+            bankAccount.withdraw(withdrawAmount);
         }).toThrow('Withdraw amount has to be greater than 0!');
     });
 
     it('should throw a "Insufficient funds!" error', () => {
         // Act & Assert
         expect(() => {
-            bankAccount.withdraw(initialBalance + 1)
+            bankAccount.withdraw(initialBalance + 1);
         }).toThrow('Insufficient funds!');
     });
 
@@ -51,7 +51,7 @@ describe('Tests for bank account class', () => {
         // Act & Assert
        bankAccount.withdraw(withdrawAmount);
         
-       expect(bankAccount.balance).toBe(initialBalance - withdrawAmount)
+       expect(bankAccount.balance).toBe(initialBalance - withdrawAmount);
     });
 
     //#endregion
@@ -64,8 +64,8 @@ describe('Tests for bank account class', () => {
         
         // Act & Assert
         expect(() => {
-            bankAccount.deposit(depositAmount)
-        }).toThrow('Deposit amount has to be greater than 0')
+            bankAccount.deposit(depositAmount);
+        }).toThrow('Deposit amount has to be greater than 0');
     });
 
     it('should update the account balance with the specified sum!', () => {
@@ -75,7 +75,7 @@ describe('Tests for bank account class', () => {
         // Act & Assert
         bankAccount.deposit(depositAmount);
         
-        expect(bankAccount.balance).toBe(initialBalance + depositAmount)
+        expect(bankAccount.balance).toBe(initialBalance + depositAmount);
     });
 
     //#endregion
@@ -86,7 +86,7 @@ describe('Tests for bank account class', () => {
         // Arrange
         const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
         const transferAmount = 100;
-        const initialBalanceDestinationAccount = 0
+        const initialBalanceDestinationAccount = 0;
 
         jest.spyOn(BankAccount.prototype, 'withdraw').mockImplementationOnce(() => {
             bankAccount['balance'] -= transferAmount;
@@ -106,14 +106,12 @@ describe('Tests for bank account class', () => {
 
     it('should transfer the specified sum back to the source account if the deposit operation fails!', () => {
         // Arrange
-        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
-        const transferAmount = -10;
+        const transferAmount = 100;
         
         // Act & Assert
         expect(() => {
-            bankAccount.transfer(transferAmount, destinationAccount)
-        }).toThrow('Something went wrong');
-        
+            bankAccount.transfer(transferAmount, null);
+        }).toThrow('Something went wrong, Your balance is not touched');
         expect(bankAccount.balance).toBe(initialBalance);
     });
     //#endregion

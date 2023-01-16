@@ -8,13 +8,17 @@ export class BankAccount {
     constructor(accountHolder) {
         this.accountHolder = accountHolder;
         this.accountNumber = uuid();
-    }
+    };
 
     withdraw(withdrawAmount: number) {
+        let initialBalance = this.balance;
+        
         if (withdrawAmount <= 0) {
-            throw new Error('Withdraw amount has to be greater than 0!')
+            this.balance = initialBalance;
+            throw new Error('Withdraw amount has to be greater than 0!');
         }
         if (this.balance < withdrawAmount) {
+            this.balance = initialBalance;
             throw new Error('Insufficient funds!');
         }
 
@@ -22,8 +26,11 @@ export class BankAccount {
     };
 
     deposit(depositAmount: number) {
+        let initialBalance = this.balance;
+        
         if (depositAmount <= 0) {
-            throw new Error('Deposit amount has to be greater than 0')
+            this.balance = initialBalance;
+            throw new Error('Deposit amount has to be greater than 0');
         }
         this.balance += depositAmount;
     };
@@ -33,10 +40,14 @@ export class BankAccount {
     };
 
     transfer(transferAmount: number, destinationBankAccount: BankAccount) {
-        if (transferAmount > this.balance || transferAmount <= 0){
-            throw new Error('Something went wrong')
+        let initialBalance = this.balance;
+        
+        try {
+            this.withdraw(transferAmount);
+            destinationBankAccount.deposit(transferAmount);
+        } catch {
+            this.balance = initialBalance;
+            throw new Error('Something went wrong, Your balance is not touched');
         }
-        this.withdraw(transferAmount);
-        destinationBankAccount.deposit(transferAmount)
     };
 }
