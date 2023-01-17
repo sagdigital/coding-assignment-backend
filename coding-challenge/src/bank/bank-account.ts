@@ -35,6 +35,16 @@ export class BankAccount {
     };
 
     transfer(transferAmount: number, destinationBankAccount: BankAccount) {
-      // This method should take a sum out of the source account and transfer it to the destination bank account.
+        if (transferAmount < 0) {
+            throw new Error('Transfer amount has to be greater than 0!');
+        }
+
+        this.withdraw(transferAmount);
+
+        try {
+            destinationBankAccount.deposit(transferAmount);
+        } catch {
+            this.deposit(transferAmount);
+        }
     };
 }
