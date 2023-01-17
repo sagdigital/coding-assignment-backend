@@ -45,7 +45,15 @@ describe('Tests for bank account class', () => {
     });
 
     it('should withdraw the specified amount and update the current balance', () => {
+        // Arrange
+        const withdrawAmount = 5;
 
+        // Act
+        bankAccount.withdraw(withdrawAmount);
+        const bankAccountBalance = bankAccount.checkBalance();
+
+        // Assert
+        expect(bankAccountBalance).toBe(initialBalance - withdrawAmount);
     });
 
     //#endregion
