@@ -1,7 +1,7 @@
 import {v4 as uuid} from 'uuid';
 
 export class BankAccount {
-    public balance: number = 0;
+    private balance: number = 0;
     public accountHolder: string;
     public accountNumber: string;
 
