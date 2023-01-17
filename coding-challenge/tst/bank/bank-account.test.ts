@@ -88,28 +88,45 @@ describe('Tests for bank account class', () => {
 
     it('should transfer the specified sum from the destination account to the source account!', () => {
         // Arrange
-        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
         const transferAmount = 100;
-
-        jest.spyOn(BankAccount.prototype, 'withdraw').mockImplementationOnce(() => {
-            bankAccount['balance'] -= transferAmount;
-        });
-
-        jest.spyOn(BankAccount.prototype, 'deposit').mockImplementationOnce(() => {
-            destinationAccount['balance'] = transferAmount;
-        })
+        const destinationAccountInitialBalance = 10;
+        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
+        destinationAccount['balance'] = destinationAccountInitialBalance;
 
         // Act
         bankAccount.transfer(transferAmount, destinationAccount);
 
         // Assert
         expect(bankAccount['balance']).toBe(initialBalance - transferAmount);
-        expect(destinationAccount['balance']).toBe(transferAmount);
+        expect(destinationAccount['balance']).toBe(destinationAccountInitialBalance + transferAmount);
     });
 
     it('should transfer the specified sum back to the source account if the deposit operation fails!', () => {
+        // Arrange
+        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
+        const transferAmount = 100;
+        jest.spyOn(destinationAccount, 'deposit').mockImplementationOnce(() => {
+            throw new Error();
+        });
 
+        // Act
+        bankAccount.transfer(transferAmount, destinationAccount);
+
+        // Assert
+        expect(bankAccount['balance']).toBe(initialBalance);
     });
+
+    it('should throw a "Transfer amount has to be greater than 0!!" error', () => {
+        // Arrange
+        const transferAmount = -100;
+        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
+
+        // Act & Assert
+        expect(() => {
+            bankAccount.transfer(transferAmount, destinationAccount);
+        }).toThrow('Transfer amount has to be greater than 0!');
+    });
+    
     //#endregion
 
 })
