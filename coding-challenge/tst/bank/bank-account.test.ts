@@ -27,7 +27,7 @@ describe('Tests for bank account class', () => {
 
     //#region Withdraw
 
-    it('should throw a "Withdraw amount has to be greater than 0!" error!', () => {
+    it('should throw a "Withdraw amount has to be greater than 0!" error', () => {
         // Arrange
         const withdrawAmount = -5;
 
@@ -60,12 +60,26 @@ describe('Tests for bank account class', () => {
 
     //#region Deposit
 
-    it('should throw a "Deposit amount has to be greater than 0" error!', () => {
+    it('should throw a "Deposit amount has to be greater than 0!" error', () => {
+        // Arrange
+        const withdrawAmount = -5;
 
+        // Act & Assert
+        expect(() => {
+            bankAccount.deposit(withdrawAmount)
+        }).toThrow('Deposit amount has to be greater than 0!');
     });
 
     it('should update the account balance with the specified sum!', () => {
+        // Arrange
+        const depositAmount = 5;
 
+        // Act
+        bankAccount.deposit(depositAmount);
+        const bankAccountBalance = bankAccount.checkBalance();
+
+        // Assert
+        expect(bankAccountBalance).toBe(initialBalance + depositAmount);
     });
 
     //#endregion
