@@ -23,6 +23,10 @@ export class BankAccount {
     };
 
     deposit(depositAmount: number) {
+        if (depositAmount < 0) {
+            throw new Error('Deposit amount has to be greater than 0!');
+        }
+
         this.balance += depositAmount;
     };
 
