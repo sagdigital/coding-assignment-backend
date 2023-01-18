@@ -92,6 +92,14 @@ describe('Tests for bank account class', () => {
         const destinationAccountInitialBalance = 10;
         const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
         destinationAccount['balance'] = destinationAccountInitialBalance;
+        
+        jest.spyOn(BankAccount.prototype, 'withdraw').mockImplementationOnce(() => {
+            bankAccount['balance'] -= transferAmount;
+        });
+
+        jest.spyOn(BankAccount.prototype, 'deposit').mockImplementationOnce(() => {
+            destinationAccount['balance'] += transferAmount;
+        });
 
         // Act
         bankAccount.transfer(transferAmount, destinationAccount);
