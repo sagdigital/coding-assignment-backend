@@ -109,11 +109,12 @@ describe('Tests for bank account class', () => {
             throw new Error();
         });
 
-        // Act
-        bankAccount.transfer(transferAmount, destinationAccount);
-
-        // Assert
-        expect(bankAccount['balance']).toBe(initialBalance);
+        // Act and Assert
+        try {
+            bankAccount.transfer(transferAmount, destinationAccount);
+        } catch {
+            expect(bankAccount['balance']).toBe(initialBalance);
+        }
     });
 
     it('should throw a "Transfer amount has to be greater than 0!!" error', () => {

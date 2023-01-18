@@ -43,8 +43,9 @@ export class BankAccount {
 
         try {
             destinationBankAccount.deposit(transferAmount);
-        } catch {
+        } catch (e) {
             this.deposit(transferAmount);
+            throw e;
         }
     };
 }
