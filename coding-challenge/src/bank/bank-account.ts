@@ -16,21 +16,21 @@ export class BankAccount {
     public withdraw(withdrawAmount: number): void {
         const validationResult = this.validateWithdrawAmount(withdrawAmount);
         
-        if (validationResult.isValid) {
-            this.balance -= withdrawAmount;
-        } else {
+        if (!validationResult.isValid) {
             throw validationResult.error;
-        }
+        } 
+        
+        this.balance -= withdrawAmount;
     };
 
     public deposit(depositAmount: number): void {
         const validationResult = this.validateDepositAmount(depositAmount);
 
-        if (validationResult.isValid) {
-            this.balance += depositAmount;
-        } else {
+        if (!validationResult.isValid) {
             throw validationResult.error;
-        }
+        } 
+
+        this.balance += depositAmount;
     };
 
     // It should be considered to change this function to a get function.
@@ -50,15 +50,17 @@ export class BankAccount {
 
     private validateWithdrawAmount(withdrawAmount: number): ValidationResult {
         const result: ValidationResult = {
-            isValid: false
+            isValid: true
         };
 
         if (this.balance < withdrawAmount) {
             result.error = new Error('Insufficient funds!');
-        } else if (withdrawAmount < 0) {
+            result.isValid = false;
+        }
+
+        if (withdrawAmount < 0) {
             result.error = new Error('Withdraw amount has to be greater than 0!');
-        } else {
-            result.isValid = true;
+            result.isValid = false;
         }
 
         return result;
@@ -66,14 +68,12 @@ export class BankAccount {
     
     private validateDepositAmount(depositAmount: number): ValidationResult {
         const result: ValidationResult = {
-            isValid: false
+            isValid: true
         };
 
         if (depositAmount < 0) {
-            result.isValid = false;
             result.error = new Error('Deposit amount has to be greater than 0!');
-        } else {
-            result.isValid = true;
+            result.isValid = false;
         }
 
         return result;
