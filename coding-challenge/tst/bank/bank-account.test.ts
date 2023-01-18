@@ -78,11 +78,6 @@ describe('Tests for bank account class', () => {
         } catch (err) {
             expect(err).toBe(error);            
         }
-
-        // Act & Assert
-        // expect(() => {
-        //     bankAccount.deposit(depositAmount)
-        // }).toThrow('Deposit amount has to be greater than 0!');
     });
 
     it('should update the account balance with the specified sum!', () => {
