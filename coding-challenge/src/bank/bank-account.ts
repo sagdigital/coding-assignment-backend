@@ -1,32 +1,72 @@
 import {v4 as uuid} from 'uuid';
+import { ValidationResult } from '../interfaces/validation-result';
 
 export class BankAccount {
-    public balance: number = 0;
+    
+    private balance: number = 0;
+
     public accountHolder: string;
     public accountNumber: string;
 
-    constructor(accountHolder) {
+    constructor(accountHolder: string) {
         this.accountHolder = accountHolder;
         this.accountNumber = uuid();
     }
 
-    withdraw(withdrawAmount: number) {
-        if (this.balance >= withdrawAmount) {
-            throw new Error('Insufficient funds!');
+    public withdraw(withdrawAmount: number): void {
+        const validationResult = this.validateWithdrawAmount(withdrawAmount);
+        
+        if (validationResult.isValid) {
+            this.balance -= withdrawAmount;
         }
-
-        this.balance -= withdrawAmount;
     };
 
-    deposit(depositAmount: number) {
-        this.balance += depositAmount;
+    public deposit(depositAmount: number): void {
+        const validationResult = this.validateDepositAmount(depositAmount);
+
+        if (validationResult.isValid) {
+            this.balance += depositAmount;
+        }
     };
 
-    checkBalance() {
+    // It should be considered to change this function to a get function.
+    public checkBalance(): number {
         return this.balance;
     };
-
-    transfer(transferAmount: number, destinationBankAccount: BankAccount) {
-      // This method should take a sum out of the source account and transfer it to the destination bank account.
+    
+    public transfer(transferAmount: number, destinationBankAccount: BankAccount): void {
+        this.withdraw(transferAmount);
+        try {
+            destinationBankAccount.deposit(transferAmount);
+        } catch (error) {
+            this.deposit(transferAmount);
+            throw error;            
+        }
     };
+
+    private validateWithdrawAmount(withdrawAmount: number): ValidationResult {
+        const result: ValidationResult = {
+            isValid: true
+        };
+
+        if (this.balance < withdrawAmount) {
+            result.error = new Error('Insufficient funds!');
+        } else if (withdrawAmount < 0) {
+            result.error = new Error('Withdraw amount has to be greater than 0!');
+        }
+
+        return result;
+    }
+    
+    private validateDepositAmount(depositAmount: number): ValidationResult {
+        const result: ValidationResult = {
+            isValid: true
+        };
+
+        if (depositAmount < 0) {
+            result.error = new Error('Deposit amount has to be greater than 0!');
+        }
+
+        return result;
+    }
 }
