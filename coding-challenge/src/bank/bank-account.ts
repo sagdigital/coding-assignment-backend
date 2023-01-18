@@ -18,6 +18,8 @@ export class BankAccount {
         
         if (validationResult.isValid) {
             this.balance -= withdrawAmount;
+        } else {
+            throw validationResult.error;
         }
     };
 
@@ -26,6 +28,8 @@ export class BankAccount {
 
         if (validationResult.isValid) {
             this.balance += depositAmount;
+        } else {
+            throw validationResult.error;
         }
     };
 
@@ -46,13 +50,15 @@ export class BankAccount {
 
     private validateWithdrawAmount(withdrawAmount: number): ValidationResult {
         const result: ValidationResult = {
-            isValid: true
+            isValid: false
         };
 
         if (this.balance < withdrawAmount) {
             result.error = new Error('Insufficient funds!');
         } else if (withdrawAmount < 0) {
             result.error = new Error('Withdraw amount has to be greater than 0!');
+        } else {
+            result.isValid = true;
         }
 
         return result;
@@ -60,11 +66,14 @@ export class BankAccount {
     
     private validateDepositAmount(depositAmount: number): ValidationResult {
         const result: ValidationResult = {
-            isValid: true
+            isValid: false
         };
 
         if (depositAmount < 0) {
+            result.isValid = false;
             result.error = new Error('Deposit amount has to be greater than 0!');
+        } else {
+            result.isValid = true;
         }
 
         return result;

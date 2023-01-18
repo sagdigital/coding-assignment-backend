@@ -30,26 +30,18 @@ describe('Tests for bank account class', () => {
     it('should throw a "Withdraw amount has to be greater than 0!" error!', () => {
         // Arrange
         const withdrawAmount = -5;
-        const error = new Error('Withdraw amount has to be greater than 0!');
 
         // Act & Assert
-        try {
-            bankAccount.withdraw(withdrawAmount);
-        } catch (err) {
-            expect(err).toBe(error);
-        }
+        expect(() => {
+            bankAccount.withdraw(withdrawAmount)
+        }).toThrow('Withdraw amount has to be greater than 0!');
     });
 
     it('should throw a "Insufficient funds!" error', () => {
-        // Arrange
-        const error = new Error('Insufficient funds!');
-
         // Act & Assert
-        try {
-            bankAccount.withdraw(initialBalance + 1);
-        } catch (err) {
-            expect(err).toBe(error);
-        }
+        expect(() => {
+            bankAccount.withdraw(initialBalance + 1)
+        }).toThrow('Insufficient funds!');
     });
 
     it('should withdraw the specified amount and update the current balance', () => {
@@ -70,14 +62,12 @@ describe('Tests for bank account class', () => {
     it('should throw a "Deposit amount has to be greater than 0" error!', () => {
         // Arrange
         const depositAmount = -5;
-        const error = new Error('Deposit amount has to be greater than 0!');
 
         // Act & Assert
-        try {
+        expect(() => {
             bankAccount.deposit(depositAmount)
-        } catch (err) {
-            expect(err).toBe(error);            
-        }
+        }).toThrow('Deposit amount has to be greater than 0!');
+        
     });
 
     it('should update the account balance with the specified sum!', () => {
@@ -115,5 +105,43 @@ describe('Tests for bank account class', () => {
             expect(bankAccount['balance']).toBe(initialBalance);
         }
     });
+
+    //#endregion
+
+    //#region Validation
+
+    it('validateWithdrawAmount returns error when balance is insufficient', () => {
+        const validationResult = bankAccount['validateWithdrawAmount'](initialBalance + 1);
+        expect(validationResult.isValid).toBe(false);
+        expect(validationResult.error).toEqual(new Error('Insufficient funds!'));
+    });
+    
+    it('validateWithdrawAmount returns error when withdraw amount is less than zero', () => {
+        const validationResult = bankAccount['validateWithdrawAmount'](-1);
+        expect(validationResult.isValid).toBe(false);
+        expect(validationResult.error).toEqual(new Error('Withdraw amount has to be greater than 0!'));
+    });
+    
+    it('validateWithdrawAmount returns valid when withdraw amount is valid', () => {
+        bankAccount.deposit(100);
+        const validationResult = bankAccount['validateWithdrawAmount'](50);
+        expect(validationResult.isValid).toBe(true);
+        expect(validationResult.error).toBeUndefined();
+    });
+
+    
+    test('should return an error if deposit amount is negative', () => {
+        const validationResult = bankAccount['validateDepositAmount'](-10);
+        expect(validationResult.isValid).toBe(false);
+        expect(validationResult.error).toBeInstanceOf(Error);
+        expect(validationResult.error?.message).toBe('Deposit amount has to be greater than 0!');
+    });
+
+    test('should not return an error if deposit amount is positive', () => {
+        const validationResult = bankAccount['validateDepositAmount'](10);
+        expect(validationResult.isValid).toBe(true);
+        expect(validationResult.error).toBeUndefined();
+    });
+
     //#endregion
 })
