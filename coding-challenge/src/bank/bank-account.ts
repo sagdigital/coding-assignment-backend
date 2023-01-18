@@ -5,12 +5,12 @@ export class BankAccount {
     public accountHolder: string;
     public accountNumber: string;
 
-    constructor(accountHolder) {
+    public constructor(accountHolder) {
         this.accountHolder = accountHolder;
         this.accountNumber = uuid();
     }
 
-    withdraw(withdrawAmount: number) {
+    public withdraw(withdrawAmount: number): void {
         if (withdrawAmount < 0) {
             throw new Error('Withdraw amount has to be greater than 0!');
         }
@@ -22,7 +22,7 @@ export class BankAccount {
         this.balance -= withdrawAmount;
     };
 
-    deposit(depositAmount: number) {
+    public deposit(depositAmount: number): void {
         if (depositAmount < 0) {
             throw new Error('Deposit amount has to be greater than 0!');
         }
@@ -30,11 +30,11 @@ export class BankAccount {
         this.balance += depositAmount;
     };
 
-    checkBalance() {
+    public checkBalance(): number {
         return this.balance;
     };
 
-    transfer(transferAmount: number, destinationBankAccount: BankAccount) {
+    public transfer(transferAmount: number, destinationBankAccount: BankAccount): void {
         if (transferAmount < 0) {
             throw new Error('Transfer amount has to be greater than 0!');
         }
