@@ -11,7 +11,11 @@ export class BankAccount {
     }
 
     withdraw(withdrawAmount: number) {
-        if (this.balance >= withdrawAmount) {
+        if (withdrawAmount < 0) {
+            throw new Error('Withdraw amount has to be greater than 0!');
+        }
+        
+        if (this.balance <= withdrawAmount) {
             throw new Error('Insufficient funds!');
         }
 
