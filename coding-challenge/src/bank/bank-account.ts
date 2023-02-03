@@ -1,32 +1,36 @@
 import {v4 as uuid} from 'uuid';
+import { validation } from '../bank/validation';
 
 export class BankAccount {
-    public balance: number = 0;
-    public accountHolder: string;
-    public accountNumber: string;
+    private balance: number = 0;
+    private accountHolder: string;
+    private accountNumber: string;
 
     constructor(accountHolder) {
         this.accountHolder = accountHolder;
         this.accountNumber = uuid();
     }
 
-    withdraw(withdrawAmount: number) {
-        if (this.balance >= withdrawAmount) {
-            throw new Error('Insufficient funds!');
-        }
-
-        this.balance -= withdrawAmount;
+    public withdraw(withdrawAmount: number): void {
+      validation.validateAmount(withdrawAmount, "Withdraw");
+      validation.validateFunds(this.balance, withdrawAmount);
+      this.balance -= withdrawAmount;
     };
 
-    deposit(depositAmount: number) {
-        this.balance += depositAmount;
+    public deposit(depositAmount: number): void {
+      validation.validateAmount(depositAmount, "Deposit");
+      this.balance += depositAmount;
     };
 
-    checkBalance() {
+    public checkBalance(): number {
         return this.balance;
     };
 
-    transfer(transferAmount: number, destinationBankAccount: BankAccount) {
-      // This method should take a sum out of the source account and transfer it to the destination bank account.
+    public transfer(transferAmount: number, destinationBankAccount: BankAccount): void {
+      validation.validateAmount(transferAmount, "Transfer");
+      validation.validateFunds(this.balance, transferAmount);
+      this.withdraw(transferAmount);
+      destinationBankAccount.deposit(transferAmount);
     };
 }
+
