@@ -5,10 +5,10 @@
     "sourceMap": true,
     "outDir": "build",
   },
+  "include": [
+    "coding-challenge/src/**/*"
+  ],
   "exclude": [
     "node_modules"
-  ],
-  "include": [
-    "final-version/src/**/*"
   ]
 }
