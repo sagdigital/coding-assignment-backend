@@ -1,4 +1,4 @@
-import {BankAccount} from "../../src/bank/bank-account";
+import { BankAccount } from "../../src/bank/bank-account";
 
 describe('Tests for bank account class', () => {
     let bankAccount: BankAccount;
@@ -40,12 +40,19 @@ describe('Tests for bank account class', () => {
     it('should throw a "Insufficient funds!" error', () => {
         // Act & Assert
         expect(() => {
-            bankAccount.withdraw(initialBalance + 1)
+            bankAccount.withdraw(initialBalance + 1);
         }).toThrow('Insufficient funds!');
     });
 
     it('should withdraw the specified amount and update the current balance', () => {
+        // Arrange
+        const withdrawAmount = 10;
 
+        // Act
+        bankAccount.withdraw(withdrawAmount);
+
+        // Assert
+        expect(bankAccount['balance']).toBe(initialBalance - withdrawAmount);
     });
 
     //#endregion
@@ -53,11 +60,24 @@ describe('Tests for bank account class', () => {
     //#region Deposit
 
     it('should throw a "Deposit amount has to be greater than 0" error!', () => {
+        // Arrange
+        const depositAmount = -1;
 
+        // Act & Assert
+        expect(() => {
+            bankAccount.deposit(depositAmount)
+        }).toThrow('Deposit amount has to be greater than 0!');
     });
 
     it('should update the account balance with the specified sum!', () => {
+        // Arrange
+        const depositAmount = 10;
 
+        // Act
+        bankAccount.deposit(depositAmount);
+
+        // Assert
+        expect(bankAccount['balance']).toBe(initialBalance + depositAmount);
     });
 
     //#endregion
@@ -67,6 +87,7 @@ describe('Tests for bank account class', () => {
     it('should transfer the specified sum from the destination account to the source account!', () => {
         // Arrange
         const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
+        const destinationInitialBalance = destinationAccount['balance'];
         const transferAmount = 100;
 
         jest.spyOn(BankAccount.prototype, 'withdraw').mockImplementationOnce(() => {
@@ -82,12 +103,30 @@ describe('Tests for bank account class', () => {
 
         // Assert
         expect(bankAccount['balance']).toBe(initialBalance - transferAmount);
-        expect(destinationAccount['balance']).toBe(transferAmount);
+        expect(destinationAccount['balance']).toBe(destinationInitialBalance + transferAmount);
     });
 
     it('should transfer the specified sum back to the source account if the deposit operation fails!', () => {
+        // Arrange
+        const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
+        const transferAmount = 10;
 
+        // Act 
+        jest.spyOn(BankAccount.prototype, 'withdraw').mockImplementationOnce(() => {
+            bankAccount['balance'] -= transferAmount;
+        });
+
+        jest.spyOn(BankAccount.prototype, 'deposit').mockImplementationOnce(() => {
+            throw new Error('Deposit fail!')
+        })
+
+        // Assert
+        expect(() => {
+            bankAccount.transfer(transferAmount, destinationAccount)
+        }).toThrowError('Deposit fail!');
+        expect(bankAccount['balance']).toBe(initialBalance);
     });
+
     //#endregion
 
 })
