@@ -84,7 +84,7 @@ describe('Tests for bank account class', () => {
 
     //#region Transfer
 
-    it('should transfer the specified sum from the destination account to the source account!', () => {
+    it('should transfer the specified sum from the source account to the destination account!', () => {
         // Arrange
         const destinationAccount: BankAccount = new BankAccount('DestinationAccount');
         const destinationInitialBalance = destinationAccount['balance'];

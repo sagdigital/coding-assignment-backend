@@ -43,7 +43,7 @@ export class BankAccount {
             destinationBankAccount.deposit(transferAmount);
         }
         catch (e: unknown) {
-            // Transfer the specified sum back to the source account if the deposit operation fails, but widraw was succesful
+            // Transfer the specified sum back to the source account if the deposit operation fails, but withdrawal was successful
             if (this.balance != initialBalance) {
                 this.balance += transferAmount;
             }
